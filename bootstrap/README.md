@@ -17,11 +17,26 @@ Notes:
 
 - when the ami version updates, the EC2 instance will be recreated -> the EC2 instance must be designed ephemeral
 
+# Running the Bootstrap Procedure
+
+## Preparation
+- create IAM user 'terraform' in AWS console
+- assign permission policies:
+   - AmazonEC2FullAccess
+   - IAMFullAccess
+- get terraform access key and add to `terraform.tfvars`
+- install terraform on local computer
+
+## Execution
+- run `terraform init`
+- run `terraform plan`
+- run `terraform apply`
+
 # Open Topics
 
 For the final, production ready implementation at least the following issues have to be addressed:
 
-* refactor TF code to individual modules
-* consider saving bootstrap `terraform.tfstate` to S3, else the bootstrap state is only locally available
-* Deploy automation EC2 instance in separate (environment independent) AWS Account
-* Have TF deploy to various environments, each in their own AWS account via AssumeRole
+- refactor TF code to individual modules
+- consider saving bootstrap `terraform.tfstate` to S3, else the bootstrap state is only locally available
+- Deploy automation EC2 instance in separate (environment independent) AWS Account
+- Have TF deploy to various environments, each in their own AWS account via AssumeRole
