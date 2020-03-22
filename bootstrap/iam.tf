@@ -40,8 +40,14 @@ resource "aws_iam_role_policy" "deployer" {
   "Statement": [
     {
       "Action": [
-        "s3:*",
-        "ec2:*"
+        "autoscaling:*",
+        "dynamodb:DeleteItem",
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "ec2:*",
+        "eks:*",
+        "iam:*",
+        "s3:*"
       ],
       "Effect": "Allow",
       "Resource": "*"

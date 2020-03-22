@@ -134,12 +134,15 @@ resource "null_resource" "deployer_bootstrap" {
     provisioner "remote-exec" {
         inline = [
             "set -e",
-            "yum -q -y install unzip git",
+            "sudo yum -q -y install unzip git",
             "if [ ! -e /usr/local/bin/terraform ]; then",
             "  curl -s -O https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip",
-            "  unzip terraform_0.12.24_linux_amd64.zip -d /usr/local/bin/",
+            "  sudo unzip terraform_0.12.24_linux_amd64.zip -d /usr/local/bin/",
             "fi",
             "rm terraform_0.12.24_linux_amd64.zip",
+            "sudo curl -s https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash",
+            "sudo wget -q -O /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/v1.17.4/bin/linux/amd64/kubectl",
+            "sudo chmod +x /usr/local/bin/kubectl"
         ]
     }
     #provisioner "local-exec" {
