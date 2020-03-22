@@ -67,3 +67,12 @@ resource "aws_security_group" "all_worker_mgmt" {
         ]
     }
 }
+
+# helm: cluster-autoscaler
+module "cluster_autoscaler" {
+  source = "./modules/helm_cluster_autoscaler"
+  region = var.region
+  account_id = var.account_id
+  cluster_name = var.cluster_name
+  eks = module.eks
+}

@@ -1,0 +1,10 @@
+awsRegion: test-region
+
+rbac:
+  create: true
+  serviceAccountAnnotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::1111111111111:role/cluster-autoscaler"
+
+autoDiscovery:
+  clusterName: test-eks-irsa
+  enabled: true
