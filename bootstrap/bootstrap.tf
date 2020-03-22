@@ -2,14 +2,12 @@ terraform {
     required_version = ">= 0.12"
 }
 
-# access key of user who runs the bootstrap
+# access_key of individual user who runs the bootstrap
 provider "aws" {
     region = var.region
     allowed_account_ids = [var.account_id]
     access_key = var.access_key
     secret_key = var.secret_key
-    #shared_credentials_file = "/Users/tf_user/.aws/creds"
-    #profile                 = "customprofile"
 }
 
 data "aws_vpc" "default" {

@@ -11,7 +11,8 @@ Steps:
 - create SecurityGroup to allow SSH access from internet
 - create Policy to allow AssumeRole and attach to the EC2 instance
 - run bootstrap.sh script which installs Terraform to EC2 instance
-- configure Terraform to use the EC2 Instance AssumeRole capability
+- create S3/DynamoDB for TF state locking
+    * Note: the S3 bucket name must be unique across all accounts!
 
 Notes:
 
@@ -24,6 +25,8 @@ Notes:
 - assign permission policies:
    - AmazonEC2FullAccess
    - IAMFullAccess
+   - AmazonS3FullAccess (for TF Remote State)
+   - AmazonDynamoDBFullAccess (for TF Remote State locking)
 - get terraform access key and add to `terraform.tfvars`
 - install terraform on local computer
 

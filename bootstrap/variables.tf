@@ -14,7 +14,3 @@ variable "account_id" {
     description = "AWS Account to operate on (whitelisting)"
     default     = "347445206419"
 }
-
-variable "audit_s3_bucket_name" {
-  description = "The name of the S3 bucket to store various audit logs."
-}
