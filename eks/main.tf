@@ -82,3 +82,12 @@ module "nginx_ingress" {
     source = "./modules/helm_nginx_ingress"
     cluster_name = var.cluster_name
 }
+
+# helm: grafana
+module "grafana" {
+    source = "./modules/helm_grafana"
+    region = var.region
+    account_id = var.account_id
+    cluster_name = var.cluster_name
+    eks = module.eks
+}
