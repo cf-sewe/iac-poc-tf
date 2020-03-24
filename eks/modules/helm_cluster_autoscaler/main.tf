@@ -29,6 +29,6 @@ resource "helm_release" "cluster-autoscaler" {
     value = var.cluster_name
   }
   values = [
-    "${file("${path.module}/cluster-autoscaler-chart-values.yaml")}"
+    file("${path.module}/cluster-autoscaler-chart-values.yaml")
   ]
 }

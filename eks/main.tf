@@ -76,3 +76,9 @@ module "cluster_autoscaler" {
   cluster_name = var.cluster_name
   eks = module.eks
 }
+
+# helm: nginx-ingress
+module "nginx_ingress" {
+    source = "./modules/helm_nginx_ingress"
+    cluster_name = var.cluster_name
+}
