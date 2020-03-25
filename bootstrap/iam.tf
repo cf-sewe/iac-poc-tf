@@ -6,12 +6,12 @@ data "aws_iam_policy_document" "ec2_role" {
     statement {
         actions = ["sts:AssumeRole"]
         principals {
-            type        = "Service"
+            type = "Service"
             identifiers = ["ec2.amazonaws.com"]
         }
         // todo: without this the assume role from EC2 wont work, check for better alternative
         principals {
-            type        = "AWS"
+            type = "AWS"
             identifiers = ["arn:aws:iam::347445206419:role/deployer"]
         }
     }

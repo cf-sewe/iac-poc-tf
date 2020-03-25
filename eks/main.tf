@@ -1,11 +1,11 @@
 terraform {
     required_version = ">= 0.12.0"
     backend "s3" {
-        encrypt        = true
-        bucket         = "terraform-state2-s3"
+        encrypt = true
+        bucket = "terraform-state2-s3"
         dynamodb_table = "terraform-state-lock-dynamodb"
-        region         = "eu-west-1"
-        key            = "cf/terraform/terraform.tfstate"
+        region = "eu-west-1"
+        key = "cf/terraform/terraform.tfstate"
     }
 }
 
@@ -14,8 +14,8 @@ provider "aws" {
     allowed_account_ids = [var.account_id]
     # todo: find better way to trasnfer the role (required with environment separation)
     assume_role {
-      role_arn     = "arn:aws:iam::${var.account_id}:role/deployer"
-      session_name = "terraform"
+        role_arn = "arn:aws:iam::${var.account_id}:role/deployer"
+        session_name = "terraform"
     }
 }
 
@@ -70,24 +70,25 @@ resource "aws_security_group" "all_worker_mgmt" {
 
 # helm: cluster-autoscaler
 module "cluster_autoscaler" {
-  source = "./modules/helm_cluster_autoscaler"
-  region = var.region
-  account_id = var.account_id
-  cluster_name = var.cluster_name
-  eks = module.eks
+    source = "./modules/helm_cluster_autoscaler"
+    account_id = var.account_id
+    region = var.region
+    eks = module.eks
+    cluster_name = var.cluster_name
 }
 
 # helm: nginx-ingress
 module "nginx_ingress" {
     source = "./modules/helm_nginx_ingress"
+    environment = var.environment
+    domain = var.domain
     cluster_name = var.cluster_name
 }
 
 # helm: grafana
 module "grafana" {
     source = "./modules/helm_grafana"
-    region = var.region
-    account_id = var.account_id
+    environment = var.environment
+    domain = var.domain
     cluster_name = var.cluster_name
-    eks = module.eks
 }

@@ -12,7 +12,9 @@ data "helm_repository" "stable" {
 resource "helm_release" "grafana" {
     name = "grafana"
     chart = "grafana"
+    namespace = "monitoring"
     repository = data.helm_repository.stable.metadata[0].name
+    recreate_pods = true
     # grafana version
     set {
         name = "image.tag"
@@ -24,7 +26,7 @@ resource "helm_release" "grafana" {
     }
     set {
         name = "ingress.hosts"
-        value = "{grafana.cplace.xyz}"
+        value = "{grafana.${var.environment}.${var.domain}}"
     }
     set_string {
         name = "ingress.annotations.kubernetes\\.io/ingress\\.class"

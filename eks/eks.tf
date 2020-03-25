@@ -18,7 +18,7 @@ module "eks" {
     cluster_name = var.cluster_name
     subnets = module.vpc.private_subnets
     vpc_id = module.vpc.vpc_id
-    enable_irsa  = true
+    enable_irsa = true
     worker_groups = [
         {
             name = "worker-group-1"
@@ -29,16 +29,16 @@ module "eks" {
                 aws_security_group.worker_group_mgmt_one.id
             ]
             tags = [
-              {
-                "key"                 = "k8s.io/cluster-autoscaler/enabled"
-                "propagate_at_launch" = "false"
-                "value"               = "true"
-              },
-              {
-                "key"                 = "k8s.io/cluster-autoscaler/${var.cluster_name}"
-                "propagate_at_launch" = "false"
-                "value"               = "true"
-              }
+                {
+                    key = "k8s.io/cluster-autoscaler/enabled"
+                    propagate_at_launch = "false"
+                    value = "true"
+                },
+                {
+                    key = "k8s.io/cluster-autoscaler/${var.cluster_name}"
+                    propagate_at_launch = "false"
+                    value = "true"
+                }
             ]
         },
         {
@@ -61,5 +61,11 @@ module "eks" {
         Environment = "test"
         GithubRepo = "terraform-aws-eks"
         GithubOrg = "terraform-aws-modules"
+    }
+}
+
+resource "kubernetes_namespace" "monitoring" {
+    metadata {
+        name = "monitoring"
     }
 }
