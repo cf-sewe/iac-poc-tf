@@ -8,6 +8,7 @@ data "kubernetes_service" "ingress" {
         name = "nginx-ingress-controller"
         namespace = "kube-system"
     }
+    depends_on = [helm_release.nginx_ingress]
 }
 
 # get zone_id , dns_name for use in domain alias

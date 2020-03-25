@@ -17,21 +17,11 @@ resource "helm_release" "nginx_ingress" {
     chart = "nginx-ingress"
     repository = data.helm_repository.stable.metadata[0].name
     namespace = "kube-system"
-    set {
-        name = "prometheus.create"
-        value = true
-    }
     set_string {
-        name = "controller.config.server-tokens"
-        value = "false"
+        name = "controller.service.annotations.service\\.beta\\.kubernetes\\.io/aws-load-balancer-ssl-cert"
+        value = module.acm.this_acm_certificate_arn
     }
-    # one nginx per k8s node (only makes sense for rather small clusters)
-    set_string {
-        name = "controller.kind"
-        value = "DaemonSet"
-    }
-    set_string {
-        name = "controller.config.default-ssl-certificate"
-        value = "kube-system/ingress-nginx"
-    }
+    values = [
+        file("${path.module}/values.yaml")
+    ]
 }
