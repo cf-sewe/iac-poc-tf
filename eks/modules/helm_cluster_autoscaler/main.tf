@@ -1,11 +1,5 @@
 data "aws_caller_identity" "current" {}
 
-provider "helm" {
-    kubernetes {
-        config_path = "${path.root}/kubeconfig_${var.cluster_name}"
-    }
-}
-
 data "helm_repository" "stable" {
     name = "stable"
     url = "https://kubernetes-charts.storage.googleapis.com"
@@ -15,7 +9,7 @@ resource "helm_release" "cluster-autoscaler" {
     name = "cluster-autoscaler"
     chart = "cluster-autoscaler"
     repository = data.helm_repository.stable.metadata[0].name
-    version = "7.1.0"
+    #version = "7.2.0"
     namespace = "kube-system"
     set_string {
         name = "awsRegion"

@@ -1,9 +1,3 @@
-provider "helm" {
-    kubernetes {
-        config_path = "${path.root}/kubeconfig_${var.cluster_name}"
-    }
-}
-
 data "helm_repository" "stable" {
     name = "stable"
     url = "https://kubernetes-charts.storage.googleapis.com"
