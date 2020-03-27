@@ -73,8 +73,8 @@ module "cluster_autoscaler" {
     source = "./modules/helm_cluster_autoscaler"
     account_id = var.account_id
     region = var.region
-    eks = module.eks
     cluster_name = var.cluster_name
+    eks = module.eks
 }
 
 # helm: nginx-ingress
@@ -83,6 +83,7 @@ module "nginx_ingress" {
     environment = var.environment
     domain = var.domain
     cluster_name = var.cluster_name
+    eks = module.eks
 }
 
 # helm: grafana
@@ -91,4 +92,5 @@ module "grafana" {
     environment = var.environment
     domain = var.domain
     cluster_name = var.cluster_name
+    eks = module.eks
 }

@@ -12,3 +12,8 @@ variable "domain" {
     description = "Domain which is configured as hosted zone in Route53"
     type        = string
 }
+
+# not used, but used to define dependency
+variable "eks" {
+    description = "EKS Output information"
+}

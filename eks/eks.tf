@@ -22,9 +22,10 @@ module "eks" {
     worker_groups = [
         {
             name = "worker-group-1"
-            instance_type = "t3.micro"
+            instance_type = "t3.small"
             additional_userdata = "echo foo bar"
             asg_desired_capacity = 1
+            asg_max_size = 6
             additional_security_group_ids = [
                 aws_security_group.worker_group_mgmt_one.id
             ]
