@@ -1,0 +1,47 @@
+---
+# see complete config: https://github.com/helm/charts/blob/master/stable/prometheus-operator/values.yaml
+
+grafana:
+    enabled: true
+    image:
+        tag: latest
+
+    # invalidate default password
+    adminPassword:
+
+    envFromSecret: "grafana-secret"
+
+    #  additionalDataSources: []
+
+    grafana.ini:
+        #  server:
+        #    domain: grafana.environment.domain
+        #    root_url: https://grafana.environment.domain
+        auth.azuread:
+            name: "Azure AD"
+            enabled: true
+            allow_sign_up: true
+            client_id: SET_BY_ENV
+            client_secret: SET_BY_ENV
+            scopes: openid email profile
+            auth_url: "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize"
+            token_url: "https://login.microsoftonline.com/organizations/oauth2/v2.0/token"
+            allowed_domains:
+            allowed_groups:
+
+    plugins:
+        - grafana-piechart-panel
+
+    ingress:
+        enabled: true
+        annotations:
+            kubernetes.io/ingress.class: nginx
+        labels: {}
+        path: /
+#    hosts:
+#      - localhost
+
+# keep metrics for 90 days
+prometheus:
+    prometheusSpec:
+        retentionTime: 90d

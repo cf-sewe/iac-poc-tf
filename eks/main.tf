@@ -98,18 +98,30 @@ module "nginx_ingress" {
 }
 
 # helm: grafana
-module "grafana" {
-    source = "./modules/helm_grafana"
+#module "grafana" {
+#    source = "./modules/helm_grafana"
+#    environment = var.environment
+#    domain = var.domain
+#    cluster_name = var.cluster_name
+#    eks = module.eks
+#    azuread_client_id = var.azuread_client_id
+#    azuread_client_secret = var.azuread_client_secret
+#}
+
+# helm: prometheus
+#module "prometheus" {
+#    source = "./modules/helm_prometheus"
+#    cluster_name = var.cluster_name
+#    eks = module.eks
+#}
+
+# helm: prometheus-operator
+module "prometheus_operator" {
+    source = "./modules/helm_prometheus-operator"
     environment = var.environment
     domain = var.domain
     cluster_name = var.cluster_name
     eks = module.eks
     azuread_client_id = var.azuread_client_id
     azuread_client_secret = var.azuread_client_secret
-}
-
-module "prometheus" {
-    source = "./modules/helm_prometheus"
-    cluster_name = var.cluster_name
-    eks = module.eks
 }
