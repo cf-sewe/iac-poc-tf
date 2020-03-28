@@ -20,7 +20,7 @@ data "kubernetes_service" "ingress" {
 data "aws_elb_hosted_zone_id" "this" {}
 
 data "aws_route53_zone" "this" {
-    name = "${var.domain}."
+    name = var.domain
     private_zone = false
 }
 
@@ -30,7 +30,7 @@ resource "aws_route53_record" "wildcard" {
     name = "*.${var.environment}.${var.domain}"
     type = "A"
     alias {
-        name = "dualstack.${data.kubernetes_service.ingress.load_balancer_ingress.0.hostname}"
+        name = data.kubernetes_service.ingress.load_balancer_ingress.0.hostname
         zone_id = data.aws_elb_hosted_zone_id.this.id
         evaluate_target_health = true
     }

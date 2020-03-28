@@ -104,4 +104,12 @@ module "grafana" {
     domain = var.domain
     cluster_name = var.cluster_name
     eks = module.eks
+    azuread_client_id = var.azuread_client_id
+    azuread_client_secret = var.azuread_client_secret
+}
+
+module "prometheus" {
+    source = "./modules/helm_prometheus"
+    cluster_name = var.cluster_name
+    eks = module.eks
 }

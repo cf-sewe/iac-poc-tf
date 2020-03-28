@@ -1,0 +1,112 @@
+image:
+    repository: grafana/grafana
+    tag: latest
+
+envFromSecret: "grafana-secret"
+
+datasources:
+    datasources.yaml:
+        apiVersion: 1
+        datasources:
+            - name: Prometheus
+              type: prometheus
+              url: http://prometheus-server.monitoring.svc.cluster.local:80
+              editable: true
+              orgId: 1
+              version: 1
+              access: proxy
+              isDefault: true
+
+
+grafana.ini:
+    #  server:
+    #    domain: grafana.environment.domain
+    #    root_url: https://grafana.environment.domain
+    auth.azuread:
+        name: "Azure AD"
+        enabled: true
+        allow_sign_up: true
+        client_id: SET_BY_ENV
+        client_secret: SET_BY_ENV
+        scopes: openid email profile
+        auth_url: "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize"
+        token_url: "https://login.microsoftonline.com/organizations/oauth2/v2.0/token"
+        allowed_domains:
+        allowed_groups:
+
+plugins:
+    - grafana-piechart-panel
+
+dashboardProviders:
+    dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+            - name: 'default'
+              orgId: 1
+              folder: ''
+              type: file
+              disableDeletion: false
+              editable: true
+              options:
+                  path: /var/lib/grafana/dashboards/default
+
+dashboards:
+    default:
+        #https://grafana.com/grafana/dashboards/11074
+        Node-Exporter-for-Prometheus:
+            gnetId: 11074
+            revision: 2
+            datasource: Prometheus
+        Kubernetes-Pod-Overview:
+            #https://grafana.com/dashboards/6781
+            gnetId: 6781
+            revision: 4
+            datasource: Prometheus
+        nginx1:
+            #https://grafana.com/dashboards/11875
+            gnetId: 11875
+            revision: 1
+            datasource: Prometheus
+        nginx2:
+            #https://grafana.com/dashboards/
+            gnetId: 10187
+            revision: 1
+            datasource: Prometheus
+        all-nodes:
+            url: https://raw.githubusercontent.com/blue-harvest/terraform-aws-blueharvest-eks/master/helm/monitoring/default-dashboards/all-nodes.json
+            datasource: Prometheus
+        autoscaler:
+            url: https://raw.githubusercontent.com/blue-harvest/terraform-aws-blueharvest-eks/master/helm/monitoring/default-dashboards/autoscaler.json
+            datasource: Prometheus
+        ingress-stats:
+            url: https://raw.githubusercontent.com/blue-harvest/terraform-aws-blueharvest-eks/master/helm/monitoring/default-dashboards/ingress-stats.json
+            datasource: Prometheus
+        k8s-capacity-planning:
+            url: https://raw.githubusercontent.com/blue-harvest/terraform-aws-blueharvest-eks/master/helm/monitoring/default-dashboards/kubernetes-capacity-planning.json
+            datasource: Prometheus
+        k8s-cluster-health:
+            url: https://raw.githubusercontent.com/blue-harvest/terraform-aws-blueharvest-eks/master/helm/monitoring/default-dashboards/kubernetes-cluster-health.json
+            datasource: Prometheus
+        k8s-cluster-prometheus:
+            url: https://raw.githubusercontent.com/blue-harvest/terraform-aws-blueharvest-eks/master/helm/monitoring/default-dashboards/kubernetes-cluster-prometheus.json
+            datasource: Prometheus
+        k8s-pod-resources:
+            url: https://raw.githubusercontent.com/blue-harvest/terraform-aws-blueharvest-eks/master/helm/monitoring/default-dashboards/kubernetes-pod-resources.json
+            datasource: Prometheus
+        pods:
+            url: https://raw.githubusercontent.com/blue-harvest/terraform-aws-blueharvest-eks/master/helm/monitoring/default-dashboards/pods.json
+            datasource: Prometheus
+
+ingress:
+    enabled: true
+    annotations:
+        kubernetes.io/ingress.class: nginx
+    labels: {}
+    path: /
+#  hosts:
+#    - localhost
+
+service:
+    annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "3000"

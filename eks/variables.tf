@@ -28,3 +28,13 @@ variable "domain" {
     type = string
     default = "cplace.xyz"
 }
+
+variable "azuread_client_id" {
+    description = "Client ID for AzureAD authentication (used e.g. by Grafana)"
+    type = string
+}
+
+variable "azuread_client_secret" {
+    description = "Client Secret for AzureAD authentication (used e.g. by Grafana)"
+    type = string
+}
