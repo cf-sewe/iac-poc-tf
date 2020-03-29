@@ -23,8 +23,8 @@ resource "helm_release" "grafana" {
     repository = data.helm_repository.stable.metadata[0].name
     recreate_pods = true
     set_string {
-        name = "ingress.hosts"
-        value = "{grafana.${var.environment}.${var.domain}}"
+        name = "ingress.hosts.0"
+        value = "grafana.${var.environment}.${var.domain}"
     }
     set_string {
         name = "grafana\\.ini.server.domain"

@@ -19,6 +19,7 @@ controller:
             http: http
             https: http
         annotations:
+            // todo AWS ELB with http/https termination does not support web-sockets. some services fail.
             service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:ap-southeast-1:99999:certificate/aaaaa-bbbb-bbbbb"
             service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
             service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
@@ -35,7 +36,16 @@ controller:
     metrics:
         port: 10254
         enabled: true
-        service:
-            annotations:
-                prometheus.io/scrape: "true"
-                prometheus.io/port: "10254"
+        # Note: Only works with vanilla prometheus helm chart, not with prometheus-operator (see ServiceMonitor)
+        #service:
+        #    annotations:
+        #        prometheus.io/scrape: "true"
+        #        prometheus.io/port: "10254"
+        serviceMonitor:
+            enabled: true
+            # prometheus-operator only detects nginx metrics if the release matches. (todo?)
+            additionalLabels:
+                release: promop
+            namespace: monitoring
+            namespaceSelector: {}
+            scrapeInterval: 15s
