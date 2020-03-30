@@ -57,3 +57,5 @@ which should be mentioned. These are made consciously and with respect to stable
 * Forward Alerts to Slack 
     * via Grafana
     * via kube-slack
+* importing raw kubernetes yaml manifests is not possible with Terraforms Kubernetes provider, however this is anyhow
+  not needed because mostly we would want to use Helm for that purpose
