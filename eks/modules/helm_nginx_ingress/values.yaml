@@ -1,31 +1,46 @@
 ## nginx configuration
 ## Ref: https://github.com/kubernetes/ingress/blob/master/controllers/nginx/configuration.md
 ##
+
+# NLB SSL redirect is a bit tricky:
+#   https://github.com/helm/charts/tree/master/stable/nginx-ingress#aws-l4-nlb-with-ssl-redirection
+#   https://github.com/kubernetes/ingress-nginx/issues/2724
+#   https://github.com/kubernetes/ingress-nginx/issues/5051
+
 controller:
     ## Limit the scope of the controller
     scope:
         enabled: false
         namespace: ""   # defaults to .Release.Namespace
 
-    kind: DaemonSet
+    #kind: DaemonSet
 
     config:
         server-tokens: "false"
         keep-alive: "3660"
+        ssl-redirect: "false"
+        server-snippet: |
+            listen 8000;
+            if ( $server_port = 80 ) {
+                return 308 https://$host$request_uri;
+            }
 
-    # enable AWS ELB L7 SSL Termination
+    containerPort:
+        http: 80
+        https: 443
+        special: 8000
+
     service:
         targetPorts:
             http: http
-            https: http
+            https: special
         annotations:
-            // todo AWS ELB with http/https termination does not support web-sockets. some services fail.
+            service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+            service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
             service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:ap-southeast-1:99999:certificate/aaaaa-bbbb-bbbbb"
-            service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
-            service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+            service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
             # less then nginx keep-alive timeout
             service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "3600"
-            service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
             # https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-policy-table.html
             service.beta.kubernetes.io/aws-load-balancer-ssl-negotiation-policy: "ELBSecurityPolicy-TLS-1-2-2017-01"
 

@@ -22,8 +22,8 @@ resource "helm_release" "prometheus_operator" {
     namespace = "monitoring"
     repository = data.helm_repository.stable.metadata[0].name
     set_string {
-        name = "grafana.ingress.hosts"
-        value = "{grafana.${var.environment}.${var.domain}}"
+        name = "grafana.ingress.hosts.0"
+        value = "grafana.${var.environment}.${var.domain}"
     }
     set_string {
         name = "grafana.grafana\\.ini.server.domain"

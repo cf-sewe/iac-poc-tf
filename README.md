@@ -43,21 +43,17 @@ which should be mentioned. These are made consciously and with respect to stable
 * using environment specific subdomain `xxx.poc.cplace.xyz`
 * using wildcard domain and wildcard certificate
     * therefore currently no `cert-manager` needed
-* currently using AWS Classic Loadbalancer with HTTPS termination
-    * Found out during testing this is not feasible as too many limitations (e.g. no WebSocket support)
-    * Should be using NLB and terminate HTTPS at ingress controller 
-* using Traefik instead of nginx-ingress
-    * investigated in Istio, and reconsidered that this is not the way to go for production anymore
+* using AWS NLB Loadbalancer with HTTPS termination
 + access to the k8s cluster (e.g. via kubectl) is only possible from the EC2 deployer instance
 
 ## Open Topics
 
 * User management to allow kubernetes cluster access (with fine grained permissions, not everybody is supposed to be admin)
 * Private ingress controller (VPC internal)
-* Egress controller
+* Investigate [Traefik 2.2](https://github.com/containous/traefik-helm-chart) as replacement candidate for nginx-ingress
+* Egress controller (all outgoing traffic should be going through it)
+    * ideally traffic to internet is by default not possible, only whitelisted destinations
 * Determine and Configure Resource Limits (CPU/Memory, to ensure proper scalability)
-* Alerts to Slack 
+* Forward Alerts to Slack 
     * via Grafana
     * via kube-slack
-    
-    
